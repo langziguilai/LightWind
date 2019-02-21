@@ -1,0 +1,67 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.0.0'
+    ext{
+        //kotiln
+        kotlin_version = "1.3.20"
+        kotlin_coroutines_core_version="1.1.1"
+        kotlinx_coroutines_android_version="1.1.1"
+        //appx
+        appcompat_version="1.1.0-alpha02"
+        recyclerview_version="1.1.0-alpha02"
+        cardview_version="1.0.0"
+        material_version="1.1.0-alpha03"
+        core_ktx_version="1.1.0-alpha04"
+        constraintlayout_version="1.1.3"
+        //android components
+        lifecycle_version="2.1.0-alpha02"
+        androidx_browser_version="1.0.0"
+        page_runtime_version="1.0.1"
+        room_runtime_version="1.1.1"
+        room_compiler_version="1.1.1"
+        workmanager_version = "1.0.0-rc01"
+        //test
+        junit_version="4.12"
+        test_runner_version="1.1.2-alpha01"
+        espresso_core_version="3.1.2-alpha01"
+        //browser
+//        mozilla_android_components="0.42.0"
+        gecko_release_version="67.0.20190208095514"
+        sentry_version="1.7.14"
+        mozilla_appservices="0.15.0"
+        //retrofit
+        retrofit_version="2.5.0"
+        okhttp_version="3.12.0"
+        //dagger
+        dagger_version="2.21"
+        //facebook stetho debug tool for sqlite connection
+        stetho_version="1.5.0"
+        //
+        leakcanary_version="1.6.3"
+    }
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:3.3.1"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "https://maven.mozilla.org/maven2"
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

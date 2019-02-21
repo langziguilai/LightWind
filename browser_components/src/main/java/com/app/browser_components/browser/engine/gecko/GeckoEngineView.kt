@@ -1,0 +1,56 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package com.app.browser_components.browser.engine.gecko
+
+import android.content.Context
+import android.util.AttributeSet
+import android.widget.FrameLayout
+import com.app.browser_components.concept.engine.EngineSession
+import com.app.browser_components.concept.engine.EngineView
+
+/**
+ * Gecko-based EngineView implementation.
+ */
+class GeckoEngineView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr), EngineView {
+
+    internal var currentGeckoView = object : NestedGeckoView(context) {
+        override fun onDetachedFromWindow() {
+            // We are releasing the session before GeckoView gets detached from the window. Otherwise
+            // GeckoView will close the session automatically and we do not want that.
+            releaseSession()
+
+            super.onDetachedFromWindow()
+        }
+    }
+
+    init {
+        // Currently this is just a FrameLayout with a single GeckoView instance. Eventually this
+        // implementation should handle at least two GeckoView so that we can switch between
+        addView(currentGeckoView)
+    }
+
+    /**
+     * Render the content of the given session.
+     */
+    override fun render(session: EngineSession) {
+        val internalSession = session as GeckoEngineSession
+
+        if (currentGeckoView.session != internalSession.geckoSession) {
+            currentGeckoView.session?.let {
+                // Release a previously assigned session. Otherwise GeckoView will close it
+                // automatically.
+                currentGeckoView.releaseSession()
+            }
+
+            currentGeckoView.session = internalSession.geckoSession
+        }
+    }
+
+    override fun canScrollVerticallyDown() = true // waiting for this issue https://bugzilla.mozilla.org/show_bug.cgi?id=1507569
+}
